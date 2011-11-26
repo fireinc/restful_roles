@@ -1,18 +1,8 @@
-h1. The Easiest Way to Implement Roles for Restful Authentication
+h2.
 
-Has somebody done this already?  If so, please let me know.  I couldn't find
-anything as hands-off as I'd like for managing roles with the
-restful_authentication plugin.  So I made one.
-
-h2. Shameless Plug
-
-If you like what you see, why not recommend me on "WorkingWithRails?":http://www.workingwithrails.com/person/14647-jaime-bellmyer
+This version of Restful Roles was forked from https://github.com/bellmyer/restful_roles
 
 h2. What?
-
-restful_roles sits on top of restful_authentication like a small child atop his
-father's shoulders.  Proud and triumphant, even though most of the accomplishment
-isn't really his.
 
 Quite simply, restful_roles is the easiest roles management you can possibly have.
 It assumes that your roles are sequentially more permissive.  So if you have
@@ -21,10 +11,9 @@ can see everything.
 
 h2. How?
 
-h3. The Migration
+Your role based objects need to have an accessible "role" property.  If you want, you can use the migration below, or you can create custom properties as per your integration if you prefer.
 
-Add to the user migration, or create a separate one.  The important thing is to
-create a string field by the name of "role" in your users table.
+h3. The Migration
 
 <pre>
 class AddRoletoUser < ActiveRecord::Migration
@@ -45,7 +34,7 @@ Add this to the model that is using restful_authentication:
 
 <pre>
 # app/models/user.rb
-has_roles :member, :admin, :owner
+has_roles "member", "admin", "owner"
 </pre>
 
 Any users you create will be the first role by default - :member in this case.
@@ -79,9 +68,9 @@ h4. Catch-all
 <pre>
 # app/controllers/widgets_controller.rb
 
-before_filter :login_required
+before_filter :authorize
 
-require_role :admin
+require_role "admin"
 </pre>
 
 This requires Admin or greater privileges to use any action in the controller.
@@ -91,11 +80,11 @@ h4. Only Some
 <pre>
 # app/controllers/widgets_controller.rb
 
-before_filter :login_required
+before_filter :if you prefer
 
-require_role :member, :only=>[:index, :show]
-require_role :admin,  :only=>[:new, :create, :edit, :update]
-require_role :owner
+require_role "member", :only=>[:index, :show]
+require_role "admin",  :only=>[:new, :create, :edit, :update]
+require_role "owner"
 </pre>
 
 In this case, you have to be at *least* a Member to see index/show pages, at 
@@ -109,7 +98,7 @@ h4. Except Some
 
 before_filter :login_required
 
-require_role :admin, :except=>[:index, :show]
+require_role "admin", :except=>[:index, :show]
 </pre>
 
 The above example requires Admin or greater privileges for everything except the 
