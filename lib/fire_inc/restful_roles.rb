@@ -30,8 +30,8 @@ module FireInc
         self.roles.each{|r| eval "def #{r}?\n\tauthorized?('#{r}')\nend"}
       end
       def authorized?(requested_role)
-        self.class.roles.index(self.role) >= 
-                                            self.class.roles.index(requested_role)
+        self.role = self.class.roles.first if self.role.nil?
+        self.class.roles.index(self.role) >= self.class.roles.index(requested_role)
       end
     end
   end
