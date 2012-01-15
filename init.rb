@@ -1,2 +1,2 @@
-ActiveRecord::Base.send(:include, Bellmyer::RestfulRoles)
-ActionController::Base.send(:include, Bellmyer::RestfulRolesController)
+ActiveRecord::Base.send(:include, FireInc::RestfulRoles)
+ActionController::Base.send(:include, FireInc::RestfulRolesController)
